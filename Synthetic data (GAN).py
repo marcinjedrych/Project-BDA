@@ -37,6 +37,6 @@ df = pd.read_excel("Data/example_data.xlsx" )
 synthetic = generate_synthetic_data(df)
 
 # Export 
-synthetic.to_excel('Data/synthetic_example_data.xlsx', index=False)
+synthetic.to_excel('Data/synthetic_data_GAN.xlsx', index=False)
 
 print("Processing complete.")
