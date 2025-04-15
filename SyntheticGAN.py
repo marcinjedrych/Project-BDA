@@ -9,16 +9,17 @@ import pandas as pd
 from sdv.single_table import CTGANSynthesizer
 from sdv.metadata import SingleTableMetadata
 
-metadata = {
-    "primary_key": None,  # No explicit primary key in the dataset
-    "columns": {
-        "age": {"sdtype": "numerical", "computer_representation": "Float"},
-        "weight": {"sdtype": "numerical", "computer_representation": "Float"},
-        "stage": {"sdtype": "categorical"},
-        "therapy": {"sdtype": "categorical"},
-        "bp": {"sdtype": "numerical", "computer_representation": "Float"},
-    }
-}
+
+# metadata = {
+#     "primary_key": None,  # No explicit primary key in the dataset
+#     "columns": {
+#         "age": {"sdtype": "numerical", "computer_representation": "Float"},
+#         "weight": {"sdtype": "numerical", "computer_representation": "Float"},
+#         "stage": {"sdtype": "categorical"},
+#         "therapy": {"sdtype": "categorical"},
+#         "bp": {"sdtype": "numerical", "computer_representation": "Float"},
+#     }
+# }
 
 def generate_synthetic_data(df):
     metadata_obj = SingleTableMetadata()
