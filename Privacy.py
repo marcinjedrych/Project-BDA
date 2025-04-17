@@ -25,7 +25,7 @@ from SyntheticGAN import generate_synthetic_data as generate_ctgan
 #from SyntheticVAE import generate_synthetic_data as generate_vae  # Assuming a similar interface
 
 # Load original data
-original = pd.read_excel("Data/example_data.xlsx")
+original = pd.read_excel("Data/original_train_data.xlsx")
 
 def encode_categorical(df):
     """One-hot encode categorical columns."""

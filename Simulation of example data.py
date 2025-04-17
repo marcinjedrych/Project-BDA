@@ -17,7 +17,7 @@ def sample_data(nsamples=10000, seed=123):
     # Disease Stage (ordinal and influenced by age)
     stage_tags = ['I', 'II', 'III', 'IV']
     stage_intercepts = [2, 3, 4]  # intercepts for each level of stage
-    stage_beta_age = -0.1  # older individuals less likely in higher stages
+    stage_beta_age = -0.2  # older individuals more likely in higher stages
     
     stage_logodds = np.array(stage_intercepts).reshape(len(stage_intercepts),1) + np.vstack([stage_beta_age * age] * len(stage_intercepts))
     stage_cumprob = expit(stage_logodds)
@@ -54,6 +54,10 @@ def plot_relationships(data):
     plt.title("Effect of Age on Disease Stage")
     plt.show()
     
+    sns.barplot(x='stage', y='age', data=data, order=['I', 'II', 'III', 'IV'])
+    plt.title("Effect of Weight on Blood Pressure")
+    plt.show()
+    
     # scatterplots with LOESS smooth line
     # fig, axes = plt.subplots(1, 2, figsize=(12, 5))
     sns.regplot(x='weight', y='bp', data=data, lowess=True, scatter_kws={'alpha':0.5})
@@ -68,8 +72,16 @@ def plot_relationships(data):
     axes[1].set_title("Effect of Therapy on Blood Pressure")
     plt.show()
 
-data = sample_data(500)
+data = sample_data(2000)
 plot_relationships(data)
 
-data = sample_data(1000)
-data.to_excel('Data/example_data.xlsx', index=False)
+data = sample_data(10000)
+
+from sklearn.model_selection import train_test_split
+
+# Split into training and test sets (e.g., 80% train, 20% test)
+original_train_data, test_data = train_test_split(data, test_size=0.2, random_state=42)
+
+# Save both to Excel files in the 'Data' folder
+original_train_data.to_excel('Data/original_train_data.xlsx', index=False)
+test_data.to_excel('Data/test_data.xlsx', index=False)

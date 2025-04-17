@@ -32,12 +32,12 @@ def generate_synthetic_data(df):
 
 
 # Load data
-df = pd.read_excel("Data/example_data.xlsx" )
+df = pd.read_excel("Data/original_train_data.xlsx" )
 
 # Generate synthetic data
 synthetic = generate_synthetic_data(df)
 
 # Export 
-synthetic.to_excel('Data/synthetic_data_GAN.xlsx', index=False)
+synthetic.to_excel('Data/synthetic_GAN_data.xlsx', index=False)
 
 print("Processing complete.")
