@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Apr 16 11:14:54 2025
+
+Code to evaluate predictive performance on original vs. synthetic GAN vs. synthetic VAE
+
+@author: Marcin
+"""
 import pandas as pd
 import statsmodels.api as sm
 from sklearn.metrics import mean_squared_error, r2_score
@@ -5,6 +13,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 # Load the data
 original = pd.read_excel("Data/original_train_data.xlsx")
 synGAN = pd.read_excel("Data/synthetic_GAN_data.xlsx")
+#synVAE = .....
 test = pd.read_excel("Data/test_data.xlsx")
 
 # Function to handle categorical variables
@@ -64,7 +73,13 @@ original_model = linear_regression(original, 'bp', test)
 print("\nModel trained on SYNTHETIC GAN data:")
 synGAN_model = linear_regression(synGAN, 'bp', test)
 
+# Run the model for synthetic VAE data
+# print("\nModel trained on SYNTHETIC VAE data:")
+# synVAE_model = linear_regression(synVAE, 'bp', test)
+
+
 def compare_models(model1, model2):
+    
     # Extract coefficients from each model
     coeffs_model1 = model1.params
     coeffs_model2 = model2.params

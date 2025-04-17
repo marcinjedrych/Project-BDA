@@ -17,7 +17,7 @@ def sample_data(nsamples=10000, seed=123):
     # Disease Stage (ordinal and influenced by age)
     stage_tags = ['I', 'II', 'III', 'IV']
     stage_intercepts = [2, 3, 4]  # intercepts for each level of stage
-    stage_beta_age = -0.2  # older individuals more likely in higher stages
+    stage_beta_age = -0.08  # older individuals more likely in higher stages
     
     stage_logodds = np.array(stage_intercepts).reshape(len(stage_intercepts),1) + np.vstack([stage_beta_age * age] * len(stage_intercepts))
     stage_cumprob = expit(stage_logodds)
