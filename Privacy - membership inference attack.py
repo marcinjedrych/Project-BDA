@@ -14,15 +14,21 @@ MIA Accuracy > 65%: High privacy risk (synthetic data leaks information about th
 """
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
+
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.preprocessing import StandardScaler
 from scipy.spatial import distance
 
+<<<<<<< Updated upstream
 # Import your synthetic data generators
 from SyntheticGAN import generate_synthetic_data as generate_ctgan
 from SyntheticVAE import generate_synthetic_data as generate_vae  # Assuming a similar interface
+=======
+original = pd.read_excel("Data/original_train_data.xlsx")
+synGAN = pd.read_excel("Data/synthetic_GAN_data.xlsx")
+test = pd.read_excel("Data/test_data.xlsx")
+>>>>>>> Stashed changes
 
 # Load original data
 original = pd.read_excel("Data/original_train_data.xlsx")
@@ -32,64 +38,51 @@ def encode_categorical(df):
     categorical_cols = df.select_dtypes(include=['object', 'category']).columns
     return pd.get_dummies(df, columns=categorical_cols)
 
-def generate_synthetic(train_original, syn_type):
-    """Generate synthetic data using the selected method."""
-    if syn_type == 'CTGAN':
-        return generate_ctgan(train_original)
-    elif syn_type == 'VAE':
-        print('VAE function not implemented yet')
-      #  return generate_vae(train_original)
-    else:
-        raise ValueError("Invalid syn_type. Choose 'CTGAN' or 'VAE'.")
 
-def evaluate_mia(original, syn_type):
+def evaluate_mia(original, synGAN, test):
+    """Can a model tell if a sample is real (from holdout) or synthetic?"""
     
-    """	Can a model tell in general if a sample is real (from holdout) or synthetic?, 
-    = overall leakage """
+    # Encode the datasets
+    original_encoded = encode_categorical(original)
+    synGAN_encoded = encode_categorical(synGAN)
+    test_encoded = encode_categorical(test)
     
-    train_original, holdout_original = train_test_split(original, test_size=0.3, random_state=42)
-
-    synthetic = generate_synthetic(train_original, syn_type)
+    # Combine the original and synthetic data for training
+    X_train = pd.concat([original_encoded, synGAN_encoded], axis=0, ignore_index=True)
+    y_train = np.array([0]*len(original_encoded) + [1]*len(synGAN_encoded))
     
-    # Encode data
-    holdout_encoded = encode_categorical(holdout_original)
-    synthetic_encoded = encode_categorical(synthetic)
-
-    # Combine datasets and label
-    X = pd.concat([holdout_encoded, synthetic_encoded], axis=0, ignore_index=True)
-    y = np.array([0]*len(holdout_encoded) + [1]*len(synthetic_encoded))
-
-    # Train/test split
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
+    # Train the classifier on the combined dataset
     clf = RandomForestClassifier()
     clf.fit(X_train, y_train)
-    y_pred = clf.predict(X_test)
+    
+    # Test on the holdout set (test data)
+    y_test = np.array([0] * len(test_encoded))  # All true labels are 0 (real data)
+    
+    # Predict on the holdout set
+    y_pred = clf.predict(test_encoded)
+
+    # Evaluate the accuracy of the attack model on the test set
     return accuracy_score(y_test, y_pred)
 
-def evaluate_targeted_mia(original, syn_type, n_samples=100):
+def evaluate_targeted_mia(original, synGAN, test, n_samples=100):
+    """Can an attacker determine whether specific records (individuals) were in the training set?"""
     
-    """Can an attacker determine whether specific records (e.g., individuals) were in the training set?
-        = individual level privacy risk
-    """
-    train_original, holdout_original = train_test_split(original, test_size=0.3, random_state=42)
-    synthetic = generate_synthetic(train_original, syn_type)
-
-    sensitive = train_original.sample(n=n_samples, random_state=1)
-    non_sensitive = holdout_original.sample(n=n_samples, random_state=1)
+    sensitive = original.sample(n=n_samples, random_state=1)
+    non_sensitive = test.sample(n=n_samples, random_state=1)
     test_records = pd.concat([sensitive, non_sensitive])
     true_labels = np.array([1]*n_samples + [0]*n_samples)
 
     scaler = StandardScaler()
-    synthetic_encoded = encode_categorical(synthetic)
+    synGAN_encoded = encode_categorical(synGAN)
     test_encoded = encode_categorical(test_records)
 
-    synthetic_normalized = scaler.fit_transform(synthetic_encoded)
+    # Normalize
+    synGAN_normalized = scaler.fit_transform(synGAN_encoded)
     test_normalized = scaler.transform(test_encoded)
 
     # Compute minimum distances
     min_distances = [
-        np.min(distance.cdist([record], synthetic_normalized, 'euclidean'))
+        np.min(distance.cdist([record], synGAN_normalized, 'euclidean'))
         for record in test_normalized
     ]
 
@@ -99,10 +92,11 @@ def evaluate_targeted_mia(original, syn_type, n_samples=100):
 
     return f1_score(true_labels, predictions)
 
+
 # --- Example usage --- #
 
-mia_score = evaluate_mia(original, syn_type='CTGAN')
+mia_score = evaluate_mia(original, synGAN, test)
 print(f"Membership Inference Attack Accuracy (CTGAN): {mia_score:.3f}")
 
-targeted_f1 = evaluate_targeted_mia(original, syn_type='CTGAN')
+targeted_f1 = evaluate_targeted_mia(original, synGAN, test)
 print(f"Targeted MIA F1 Score (CTGAN): {targeted_f1:.3f}")
