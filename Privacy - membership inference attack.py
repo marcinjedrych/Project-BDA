@@ -22,7 +22,7 @@ from scipy.spatial import distance
 
 # Import your synthetic data generators
 from SyntheticGAN import generate_synthetic_data as generate_ctgan
-#from SyntheticVAE import generate_synthetic_data as generate_vae  # Assuming a similar interface
+from SyntheticVAE import generate_synthetic_data as generate_vae  # Assuming a similar interface
 
 # Load original data
 original = pd.read_excel("Data/original_train_data.xlsx")

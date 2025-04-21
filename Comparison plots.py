@@ -11,13 +11,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+import os
 
-original = pd.read_excel("Data/original_train_data.xlsx" )
-synGAN = pd.read_excel("Data/synthetic_GAN_data.xlsx" )  #GAN
+filepath = os.path.dirname(os.path.realpath(__file__))
+originaldir = os.path.join(filepath, "Data", "original_train_data.xlsx")
+syngandatadir = os.path.join(filepath, "Data", "synthetic_GAN_data.xlsx")
+synvaedir = os.path.join(filepath, "Data", "synthetic_VAE_data.xlsx")
 
-# Uncomment this line when VAE data is available
-# synVAE = pd.read_excel("Data/synthetic_VAE_data.xlsx" )  #VAE
-synVAE = None
+original = pd.read_excel(originaldir)
+synGAN = pd.read_excel(syngandatadir)  #GAN
+synVAE = pd.read_excel(synvaedir)
 
 ### --- UNIVARIATE ---
 
