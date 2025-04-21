@@ -16,18 +16,22 @@ filepath = os.path.dirname(os.path.realpath(__file__))
 originaldir = os.path.join(filepath, "Data", "original_train_data.xlsx")
 syngandatadir = os.path.join(filepath, "Data", "synthetic_GAN_data.xlsx")
 synvaedir = os.path.join(filepath, "Data", "synthetic_VAE_data.xlsx")
-testdir = os.path.join(filepath, "Data")
+testdir = os.path.join(filepath, "Data", "test_data.xlsx")
 
 original = pd.read_excel(originaldir)
 synGAN = pd.read_excel(syngandatadir)  #GAN
 synVAE = pd.read_excel(synvaedir)
-test = pd.read_excel("Data/test_data.xlsx")
+test = pd.read_excel(testdir)
 
 # Function to handle categorical variables
 def encode_categorical(data):
 
     data = pd.get_dummies(data, columns=['stage'], drop_first=True) 
     data['therapy'] = data['therapy'].astype(int)
+    data['stage_II'] = data["stage_II"].astype(int)
+    data['stage_III'] = data["stage_III"].astype(int)
+    data['stage_IV'] = data["stage_IV"].astype(int)
+
     
     return data
 
@@ -49,6 +53,7 @@ def linear_regression(data, target_variable, test_data):
     X_test = sm.add_constant(X_test)
     
     # Fit the OLS model
+    ### XXX use factorized data for binary variables!! 
     model = sm.OLS(y_train, X_train).fit()
 
     # Predictions on test set
@@ -85,17 +90,20 @@ print("\nModel trained on SYNTHETIC VAE data:")
 synVAE_model = linear_regression(synVAE, 'bp', test)
 
 
-def compare_models(model1, model2):
+def compare_models(modelorig, modelgan, modelvae):
     
     # Extract coefficients from each model
-    coeffs_model1 = model1.params
-    coeffs_model2 = model2.params
+    coeffs_orig = modelorig.params
+    coeffs_GAN = modelgan.params
+    coeffs_VAE = modelvae.params
     
     # Create a DataFrame to compare coefficients
     coefficients_comparison = pd.DataFrame({
-        'Coeff Model 1 (Original Data)': coeffs_model1,
-        'Coeff Model 2 (Synthetic GAN Data)': coeffs_model2,
-        'Difference': coeffs_model2 - coeffs_model1
+        'Coeff Model 1 (Original Data)': coeffs_orig,
+        'Coeff Model 2 (Synthetic GAN Data)': coeffs_GAN,
+        'Coeff Model 3 (Synthetic VAE Data)': coeffs_VAE,
+        'Difference Model 2 - Model 1': coeffs_GAN - coeffs_orig,
+        'Difference Model 3 - Model 1': coeffs_VAE - coeffs_orig
     })
     
     # Print the model summaries
@@ -104,4 +112,4 @@ def compare_models(model1, model2):
     # Return the table of coefficients and differences
     return coefficients_comparison
 
-coefficients_comparison = compare_models(original_model, synGAN_model)
+coefficients_comparison = compare_models(original_model, synGAN_model, synVAE_model)

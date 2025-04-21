@@ -120,6 +120,10 @@ def plot_bivariate(original, synthetic1, synthetic2=None):
 plot_bivariate(original, synGAN, synVAE)
 
 def compare_correlation_matrices(original, synthetic1, synthetic2=None):
+    original.stage = pd.factorize(original.stage)[0]
+    synthetic1.stage = pd.factorize(synthetic1.stage)[0]
+    synthetic2.stage = pd.factorize(synthetic2.stage)[0]
+
     corr_original = original.corr()
     corr_synthetic1 = synthetic1.corr()
     diff_corr_1 = corr_original - corr_synthetic1

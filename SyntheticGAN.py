@@ -8,7 +8,7 @@ Created on Tue Apr  1 11:11:54 2025
 import pandas as pd
 from sdv.single_table import CTGANSynthesizer
 from sdv.metadata import SingleTableMetadata
-
+import os
 
 # metadata = {
 #     "primary_key": None,  # No explicit primary key in the dataset
@@ -32,12 +32,16 @@ def generate_synthetic_data(df):
 
 
 # Load data
-df = pd.read_excel("Data/original_train_data.xlsx" )
+filepath = os.path.dirname(os.path.realpath(__file__))
+originaldir = os.path.join(filepath, "Data", "original_train_data.xlsx")
+
+df = pd.read_excel(originaldir)
 
 # Generate synthetic data
 synthetic = generate_synthetic_data(df)
 
-# Export 
-synthetic.to_excel('Data/synthetic_GAN_data.xlsx', index=False)
+# Export
+outputdatadir = os.path.join(filepath, "Data", "synthetic_GAN_data.xlsx")
+synthetic.to_excel(outputdatadir, index=False)
 
 print("Processing complete.")

@@ -6,3 +6,6 @@ Repository for the course Big Data Algorithms
 2.) VAE
 
 3.) Evaluation
+
+
+# add requirements!

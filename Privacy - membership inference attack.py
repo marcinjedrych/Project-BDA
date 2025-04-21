@@ -19,13 +19,17 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.preprocessing import StandardScaler
 from scipy.spatial import distance
+import os
 
 # Import your synthetic data generators
 from SyntheticGAN import generate_synthetic_data as generate_ctgan
 from SyntheticVAE import generate_synthetic_data as generate_vae  # Assuming a similar interface
 
 # Load original data
-original = pd.read_excel("Data/original_train_data.xlsx")
+filepath = os.path.dirname(os.path.realpath(__file__))
+inputdatadir = os.path.join(filepath, "Data", "original_train_data.xlsx")
+
+original = pd.read_excel(inputdatadir)
 
 def encode_categorical(df):
     """One-hot encode categorical columns."""
@@ -38,7 +42,7 @@ def generate_synthetic(train_original, syn_type):
         return generate_ctgan(train_original)
     elif syn_type == 'VAE':
         print('VAE function not implemented yet')
-      #  return generate_vae(train_original)
+        return generate_vae(train_original)
     else:
         raise ValueError("Invalid syn_type. Choose 'CTGAN' or 'VAE'.")
 
@@ -106,3 +110,10 @@ print(f"Membership Inference Attack Accuracy (CTGAN): {mia_score:.3f}")
 
 targeted_f1 = evaluate_targeted_mia(original, syn_type='CTGAN')
 print(f"Targeted MIA F1 Score (CTGAN): {targeted_f1:.3f}")
+
+
+mia_score = evaluate_mia(original, syn_type='VAE')
+print(f"Membership Inference Attack Accuracy (VAE): {mia_score:.3f}")
+
+targeted_f1 = evaluate_targeted_mia(original, syn_type='VAE')
+print(f"Targeted MIA F1 Score (VAE): {targeted_f1:.3f}")
