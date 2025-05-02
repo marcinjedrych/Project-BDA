@@ -31,10 +31,15 @@ inputdatadir = os.path.join(filepath, "Data", "original_train_data.xlsx")
 
 original = pd.read_excel(inputdatadir)
 
-def encode_categorical(df):
-    """One-hot encode categorical columns."""
-    categorical_cols = df.select_dtypes(include=['object', 'category']).columns
-    return pd.get_dummies(df, columns=categorical_cols)
+def encode_categorical(data):
+    data = pd.get_dummies(data, columns=['stage'], drop_first=True) 
+    data['therapy'] = data['therapy'].astype(int)
+    data['stage_II'] = data["stage_II"].astype(int)
+    data['stage_III'] = data["stage_III"].astype(int)
+    data['stage_IV'] = data["stage_IV"].astype(int)
+    
+    return data
+
 
 def generate_synthetic(train_original, syn_type):
     """Generate synthetic data using the selected method."""
@@ -46,17 +51,17 @@ def generate_synthetic(train_original, syn_type):
     else:
         raise ValueError("Invalid syn_type. Choose 'CTGAN' or 'VAE'.")
 
-def evaluate_mia(original, synGAN, test):
+def evaluate_mia(original, syn, test):
     """Can a model tell if a sample is real (from holdout) or synthetic?"""
     
     # Encode the datasets
     original_encoded = encode_categorical(original)
-    synGAN_encoded = encode_categorical(synGAN)
+    # synGAN_encoded = encode_categorical(synGAN)
     test_encoded = encode_categorical(test)
     
     # Combine the original and synthetic data for training
-    X_train = pd.concat([original_encoded, synGAN_encoded], axis=0, ignore_index=True)
-    y_train = np.array([0]*len(original_encoded) + [1]*len(synGAN_encoded))
+    X_train = pd.concat([original_encoded, syn], axis=0, ignore_index=True)
+    y_train = np.array([0]*len(original_encoded) + [1]*len(syn))
     
     # Train the classifier on the combined dataset
     clf = RandomForestClassifier()
@@ -71,7 +76,7 @@ def evaluate_mia(original, synGAN, test):
     # Evaluate the accuracy of the attack model on the test set
     return accuracy_score(y_test, y_pred)
 
-def evaluate_targeted_mia(original, synGAN, test, n_samples=100):
+def evaluate_targeted_mia(original, syn, test, n_samples=100):
     """Can an attacker determine whether specific records (individuals) were in the training set?"""
     
     sensitive = original.sample(n=n_samples, random_state=1)
@@ -80,16 +85,15 @@ def evaluate_targeted_mia(original, synGAN, test, n_samples=100):
     true_labels = np.array([1]*n_samples + [0]*n_samples)
 
     scaler = StandardScaler()
-    synGAN_encoded = encode_categorical(synGAN)
     test_encoded = encode_categorical(test_records)
 
     # Normalize
-    synGAN_normalized = scaler.fit_transform(synGAN_encoded)
+    syn_normalized = scaler.fit_transform(syn)
     test_normalized = scaler.transform(test_encoded)
 
     # Compute minimum distances
     min_distances = [
-        np.min(distance.cdist([record], synGAN_normalized, 'euclidean'))
+        np.min(distance.cdist([record], syn_normalized, 'euclidean'))
         for record in test_normalized
     ]
 
@@ -100,17 +104,31 @@ def evaluate_targeted_mia(original, synGAN, test, n_samples=100):
     return f1_score(true_labels, predictions)
 
 
-# --- Example usage --- #
+if __name__ == "__main__": 
+
+    # Load the data
+    filepath = os.path.dirname(os.path.realpath(__file__))
+    originaldir = os.path.join(filepath, "Data", "original_train_data.xlsx")
+    syngandatadir = os.path.join(filepath, "Data", "synthetic_GAN_data.xlsx")
+    synvaedir = os.path.join(filepath, "Data", "synthetic_VAE_data.xlsx")
+    testdir = os.path.join(filepath, "Data", "test_data.xlsx")
+
+    original = pd.read_excel(originaldir)
+    synGAN = pd.read_excel(syngandatadir)  #GAN
+    synVAE = pd.read_excel(synvaedir)
+    test = pd.read_excel(testdir)
+
 
 mia_score = evaluate_mia(original, synGAN, test)
+
 print(f"Membership Inference Attack Accuracy (CTGAN): {mia_score:.3f}")
 
 targeted_f1 = evaluate_targeted_mia(original, synGAN, test)
 print(f"Targeted MIA F1 Score (CTGAN): {targeted_f1:.3f}")
 
 
-mia_score = evaluate_mia(original, syn_type='VAE')
+mia_score = evaluate_mia(original, synVAE, test)
 print(f"Membership Inference Attack Accuracy (VAE): {mia_score:.3f}")
 
-targeted_f1 = evaluate_targeted_mia(original, syn_type='VAE')
+targeted_f1 = evaluate_targeted_mia(original, synVAE, test)
 print(f"Targeted MIA F1 Score (VAE): {targeted_f1:.3f}")

@@ -30,18 +30,29 @@ def generate_synthetic_data(df):
     
     return synthetic_data
 
+def encode_categorical(data):
+    data = pd.get_dummies(data, columns=['stage'], drop_first=True) 
+    data['therapy'] = data['therapy'].astype(int)
+    data['stage_II'] = data["stage_II"].astype(int)
+    data['stage_III'] = data["stage_III"].astype(int)
+    data['stage_IV'] = data["stage_IV"].astype(int)
 
-# Load data
-filepath = os.path.dirname(os.path.realpath(__file__))
-originaldir = os.path.join(filepath, "Data", "original_train_data.xlsx")
+    
+    return data
 
-df = pd.read_excel(originaldir)
+if __name__ == "__main__": 
+    # Load data
+    filepath = os.path.dirname(os.path.realpath(__file__))
+    originaldir = os.path.join(filepath, "Data", "original_train_data.xlsx")
 
-# Generate synthetic data
-synthetic = generate_synthetic_data(df)
+    df = pd.read_excel(originaldir)
+    df = encode_categorical(df)
 
-# Export
-outputdatadir = os.path.join(filepath, "Data", "synthetic_GAN_data.xlsx")
-synthetic.to_excel(outputdatadir, index=False)
+    # Generate synthetic data
+    synthetic = generate_synthetic_data(df)
 
-print("Processing complete.")
+    # Export
+    outputdatadir = os.path.join(filepath, "Data", "synthetic_GAN_data.xlsx")
+    synthetic.to_excel(outputdatadir, index=False)
+
+    print("Processing complete.")

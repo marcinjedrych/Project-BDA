@@ -11,21 +11,10 @@ import statsmodels.api as sm
 from sklearn.metrics import mean_squared_error, r2_score
 import os
 
-# Load the data
-filepath = os.path.dirname(os.path.realpath(__file__))
-originaldir = os.path.join(filepath, "Data", "original_train_data.xlsx")
-syngandatadir = os.path.join(filepath, "Data", "synthetic_GAN_data.xlsx")
-synvaedir = os.path.join(filepath, "Data", "synthetic_VAE_data.xlsx")
-testdir = os.path.join(filepath, "Data", "test_data.xlsx")
-
-original = pd.read_excel(originaldir)
-synGAN = pd.read_excel(syngandatadir)  #GAN
-synVAE = pd.read_excel(synvaedir)
-test = pd.read_excel(testdir)
 
 # Function to handle categorical variables
 def encode_categorical(data):
-
+    
     data = pd.get_dummies(data, columns=['stage'], drop_first=True) 
     data['therapy'] = data['therapy'].astype(int)
     data['stage_II'] = data["stage_II"].astype(int)
@@ -38,7 +27,6 @@ def encode_categorical(data):
 # Function to perform the regression model
 def linear_regression(data, target_variable, test_data):
     
-    data = encode_categorical(data)
     test_data = encode_categorical(test_data)
     
     # Separate target and predictors
@@ -53,7 +41,6 @@ def linear_regression(data, target_variable, test_data):
     X_test = sm.add_constant(X_test)
     
     # Fit the OLS model
-    ### XXX use factorized data for binary variables!! 
     model = sm.OLS(y_train, X_train).fit()
 
     # Predictions on test set
@@ -77,17 +64,7 @@ def linear_regression(data, target_variable, test_data):
     
     return model
 
-# Run the model for original data
-print("Model trained on ORIGINAL data:")
-original_model = linear_regression(original, 'bp', test)
 
-# Run the model for synthetic GAN data
-print("\nModel trained on SYNTHETIC GAN data:")
-synGAN_model = linear_regression(synGAN, 'bp', test)
-
-# Run the model for synthetic VAE data
-print("\nModel trained on SYNTHETIC VAE data:")
-synVAE_model = linear_regression(synVAE, 'bp', test)
 
 
 def compare_models(modelorig, modelgan, modelvae):
@@ -108,8 +85,38 @@ def compare_models(modelorig, modelgan, modelvae):
     
     # Print the model summaries
     print(coefficients_comparison)
+
+    coefficients_comparison.to_csv(os.path.join(filepath, "Data", "comparison_coefficients.csv")
+)
     
     # Return the table of coefficients and differences
     return coefficients_comparison
 
-coefficients_comparison = compare_models(original_model, synGAN_model, synVAE_model)
+if __name__ == "__main__": 
+
+    # Load the data
+    filepath = os.path.dirname(os.path.realpath(__file__))
+    originaldir = os.path.join(filepath, "Data", "original_train_data.xlsx")
+    syngandatadir = os.path.join(filepath, "Data", "synthetic_GAN_data.xlsx")
+    synvaedir = os.path.join(filepath, "Data", "synthetic_VAE_data.xlsx")
+    testdir = os.path.join(filepath, "Data", "test_data.xlsx")
+
+    original = pd.read_excel(originaldir)
+    synGAN = pd.read_excel(syngandatadir)  #GAN
+    synVAE = pd.read_excel(synvaedir)
+    test = pd.read_excel(testdir)
+
+    # Run the model for original data
+    print("Model trained on ORIGINAL data:")
+    original = encode_categorical(original)
+    original_model = linear_regression(original, 'bp', test)
+
+    # Run the model for synthetic GAN data
+    print("\nModel trained on SYNTHETIC GAN data:")
+    synGAN_model = linear_regression(synGAN, 'bp', test)
+
+    # Run the model for synthetic VAE data
+    print("\nModel trained on SYNTHETIC VAE data:")
+    synVAE_model = linear_regression(synVAE, 'bp', test)
+
+    coefficients_comparison = compare_models(original_model, synGAN_model, synVAE_model)
