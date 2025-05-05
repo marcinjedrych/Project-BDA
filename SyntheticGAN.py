@@ -21,10 +21,10 @@ import os
 #     }
 # }
 
-def generate_synthetic_data(df):
+def generate_synthetic_data_GAN(df, epochs = 500):
     metadata_obj = SingleTableMetadata()
     metadata_obj.detect_from_dataframe(df)
-    synthesizer = CTGANSynthesizer(metadata_obj)
+    synthesizer = CTGANSynthesizer(metadata_obj, epochs = epochs)
     synthesizer.fit(df)
     synthetic_data = synthesizer.sample(num_rows=len(df))
     
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     df = encode_categorical(df)
 
     # Generate synthetic data
-    synthetic = generate_synthetic_data(df)
+    synthetic = generate_synthetic_data_GAN(df)
 
     # Export
     outputdatadir = os.path.join(filepath, "Data", "synthetic_GAN_data.xlsx")

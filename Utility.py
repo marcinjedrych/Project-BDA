@@ -67,7 +67,7 @@ def linear_regression(data, target_variable, test_data):
 
 
 
-def compare_models(modelorig, modelgan, modelvae):
+def compare_models(modelorig, modelgan, modelvae, filepath):
     
     # Extract coefficients from each model
     coeffs_orig = modelorig.params
@@ -86,8 +86,8 @@ def compare_models(modelorig, modelgan, modelvae):
     # Print the model summaries
     print(coefficients_comparison)
 
-    coefficients_comparison.to_csv(os.path.join(filepath, "Data", "comparison_coefficients.csv")
-)
+    coefficients_comparison.to_csv(os.path.join(filepath, "Data", "comparison_coefficients.csv"))
+
     
     # Return the table of coefficients and differences
     return coefficients_comparison
@@ -119,4 +119,4 @@ if __name__ == "__main__":
     print("\nModel trained on SYNTHETIC VAE data:")
     synVAE_model = linear_regression(synVAE, 'bp', test)
 
-    coefficients_comparison = compare_models(original_model, synGAN_model, synVAE_model)
+    coefficients_comparison = compare_models(original_model, synGAN_model, synVAE_model, filepath)

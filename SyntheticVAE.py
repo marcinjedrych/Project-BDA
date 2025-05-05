@@ -5,7 +5,7 @@ import os
 import matplotlib.pyplot as plt
 from sdv.evaluation.single_table import evaluate_quality
 
-def generate_synthetic_data(df, epochs = 500, visualize_loss = False, evaluation = False):
+def generate_synthetic_data_VAE(df, epochs = 500, visualize_loss = False, evaluation = False):
     metadata = Metadata.detect_from_dataframe(data = df)
     metadata.visualize()
 
@@ -55,6 +55,6 @@ if __name__ == "__main__":
 
     df = pd.read_excel(inputdatadir)
     df = encode_categorical(df)
-    synthetic = generate_synthetic_data(df, epochs = 10, visualize_loss = True, evaluation = True)
+    synthetic = generate_synthetic_data_VAE(df, visualize_loss = True, evaluation = True)
     synthetic.to_excel(outputdatadir, index=False)
 

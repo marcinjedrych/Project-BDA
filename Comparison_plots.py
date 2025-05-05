@@ -170,6 +170,6 @@ if __name__ == "__main__":
     synGAN = pd.read_excel(syngandatadir)  #GAN
     synVAE = pd.read_excel(synvaedir)
     
-    # plot_univariate(original, synGAN, synVAE)
-    # plot_bivariate(original, synGAN, synVAE)
+    plot_univariate(original, synGAN, synVAE)
+    plot_bivariate(original, synGAN, synVAE)
     compare_correlation_matrices(original, synGAN, synVAE)

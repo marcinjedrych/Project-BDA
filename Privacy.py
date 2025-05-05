@@ -22,8 +22,8 @@ from scipy.spatial import distance
 import os
 
 # Import your synthetic data generators
-from SyntheticGAN import generate_synthetic_data as generate_ctgan
-from SyntheticVAE import generate_synthetic_data as generate_vae  # Assuming a similar interface
+from SyntheticGAN import generate_synthetic_data_GAN as generate_ctgan
+from SyntheticVAE import generate_synthetic_data_VAE as generate_vae  # Assuming a similar interface
 
 # Load original data
 filepath = os.path.dirname(os.path.realpath(__file__))
@@ -119,16 +119,16 @@ if __name__ == "__main__":
     test = pd.read_excel(testdir)
 
 
-mia_score = evaluate_mia(original, synGAN, test)
+    mia_score = evaluate_mia(original, synGAN, test)
 
-print(f"Membership Inference Attack Accuracy (CTGAN): {mia_score:.3f}")
+    print(f"Membership Inference Attack Accuracy (CTGAN): {mia_score:.3f}")
 
-targeted_f1 = evaluate_targeted_mia(original, synGAN, test)
-print(f"Targeted MIA F1 Score (CTGAN): {targeted_f1:.3f}")
+    targeted_f1 = evaluate_targeted_mia(original, synGAN, test)
+    print(f"Targeted MIA F1 Score (CTGAN): {targeted_f1:.3f}")
 
 
-mia_score = evaluate_mia(original, synVAE, test)
-print(f"Membership Inference Attack Accuracy (VAE): {mia_score:.3f}")
+    mia_score = evaluate_mia(original, synVAE, test)
+    print(f"Membership Inference Attack Accuracy (VAE): {mia_score:.3f}")
 
-targeted_f1 = evaluate_targeted_mia(original, synVAE, test)
-print(f"Targeted MIA F1 Score (VAE): {targeted_f1:.3f}")
+    targeted_f1 = evaluate_targeted_mia(original, synVAE, test)
+    print(f"Targeted MIA F1 Score (VAE): {targeted_f1:.3f}")
