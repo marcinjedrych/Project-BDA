@@ -7,7 +7,7 @@ This project was developed for an assignment in the course Big Data Algorithms. 
 
 Project-BDA/
 - Data/                         :  Contains real and synthetic datasets
-- `Comparison_plots.py`           :  Univariate and bivariate comparisons
+- `Comparison_plots.py`           :  Univariate and bivariate visual comparisons
 - `Privacy.py`                    :  Membership inference attack
 - `Simulation_example_data.py` : Simulates data for original dataset
 - `SyntheticGAN.py`               : Generates synthetic data using CTGAN
