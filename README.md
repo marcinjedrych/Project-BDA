@@ -3,7 +3,7 @@
 
 This project was developed for an assignment in the course Big Data Algorithms. First, we simulated an original dataset and generated synthetic versions using two generative models: **CTGAN** and **TVAE**. We focused on evaluating the synthetic data and the privacy-utility trade-off. 
 
-## Project Structure
+## 📂 Project Structure
 
 Project-BDA/
 - Data/                         :  Contains real and synthetic datasets
@@ -15,7 +15,7 @@ Project-BDA/
 - Utility.py                    : Predictive performance evaluations
 - demo.ipynb                    : 
 
-## How to run
+## 🚀 How to run
 
 1. Simulate the original dataset
     - Run: Simulation of example data.py
@@ -39,3 +39,7 @@ Project-BDA/
 - `pandas`, `numpy`, `matplotlib`, `seaborn`
 - `scikit-learn`
 - `sdv` (for CTGAN and TVAE models)
+
+## 👩‍💻 Authors
+
+Developed by [Marcin Jedrych, Frie Van Bauwel, Xueting Li] as part of the course **Big Data Algorithms (BDA)** at [Ghent University].  
