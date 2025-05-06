@@ -6,15 +6,15 @@ This project was developed for an assignment in the course Big Data Algorithms. 
 ## Project Structure
 
 Project-BDA/
-- Data/                          # Contains real and synthetic datasets
-- Comparison_plots.py           # Univariate and bivariate comparisons
-- Privacy.py                    # Membership inference attack
-- README.md                     # Project overview and instructions
-- Simulation of example data.py # Simulates original datasets
-- SyntheticGAN.py               # Generates synthetic data using CTGAN
-- SyntheticVAE.py               # Generates synthetic data using TVAE
-- Utility.py                    # Predictive performance evaluations
-- demo.ipynb                    # 
+- Data/                         :  Contains real and synthetic datasets
+- Comparison_plots.py           :  Univariate and bivariate comparisons
+- Privacy.py                    :  Membership inference attack
+- README.md                     : Project overview and instructions
+- Simulation of example data.py : Simulates original datasets
+- SyntheticGAN.py               : Generates synthetic data using CTGAN
+- SyntheticVAE.py               : Generates synthetic data using TVAE
+- Utility.py                    : Predictive performance evaluations
+- demo.ipynb                    : 
 
 ## How to run
 
