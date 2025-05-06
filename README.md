@@ -9,7 +9,7 @@ Project-BDA/
 - Data/                         :  Contains real and synthetic datasets
 - `Comparison_plots.py`           :  Univariate and bivariate comparisons
 - `Privacy.py`                    :  Membership inference attack
-- `Simulation of example data.py` : Simulates original datasets
+- `Simulation_example_data.py` : Simulates data for original dataset
 - `SyntheticGAN.py`               : Generates synthetic data using CTGAN
 - `SyntheticVAE.py`               : Generates synthetic data using TVAE
 - `Utility.py`                    : Predictive performance evaluations
@@ -18,7 +18,7 @@ Project-BDA/
 ## 🚀 How to run
 
 1. Simulate the original dataset
-    - Run: `Simulation of example data.py`
+    - Run: `Simulation_example_data.py`
 
 2. Generate synthetic data
     - Using CTGAN: `SyntheticGAN.py`
