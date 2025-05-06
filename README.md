@@ -5,7 +5,7 @@ This project was developed for an assignment in the course Big Data Algorithms. 
 
 In the code, we first simulated an original dataset and generated synthetic versions using two generative models: **CTGAN** and **TVAE**. We focused on evaluating the synthetic data and the privacy-utility trade-off. 
 
-The methods to generate and evaluate synthetic data are by no means exhaustive. GAN and VAE are two popular generation techniques based on neural networks, hence we chose to variations of these techniques to showcase how synthetic data generation works. As for the evaluation, there is no common way researchers agree on how to properly evaluate similarity, utility or privacy of synthetic data. Therefor, a small selection of what seems to be regularly done is demonstrated here. 
+The methods to generate and evaluate synthetic data are by no means exhaustive. GAN and VAE are two popular generation techniques based on neural networks, hence we chose two variations of these techniques to showcase how synthetic data generation works. As for the evaluation, there is no common way researchers agree on how to properly evaluate similarity, utility or privacy of synthetic data. Therefor, a small selection of what seems to be regularly done is demonstrated here. 
 
 
 ## 📂 Project Structure
