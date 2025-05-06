@@ -18,20 +18,20 @@ Project-BDA/
 ## How to run
 
 1. Simulate the original dataset
-  Run: Simulation of example data.py
+  - Run: Simulation of example data.py
 
 2. Generate synthetic data
-  Using CTGAN: SyntheticGAN.py
-  Using TVAE: SyntheticVAE.py
+  - Using CTGAN: SyntheticGAN.py
+  - Using TVAE: SyntheticVAE.py
 
 3. Compare datasets visually
-  Run: Comparison_plots.py
+  - Run: Comparison_plots.py
 
 4. Evaluate utility (predictive performance)
-  Run: Utility.py
+  - Run: Utility.py
 
 5. Evaluate privacy (membership inference attack)
-  Run: Privacy.py
+ - Run: Privacy.py
 
 ## 🔧 Requirements
 
