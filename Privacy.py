@@ -21,9 +21,9 @@ from sklearn.preprocessing import StandardScaler
 from scipy.spatial import distance
 import os
 
-# Import your synthetic data generators
+# Import synthetic data generators
 from SyntheticGAN import generate_synthetic_data_GAN as generate_ctgan
-from SyntheticVAE import generate_synthetic_data_VAE as generate_vae  # Assuming a similar interface
+from SyntheticVAE import generate_synthetic_data_VAE as generate_vae
 
 # Load original data
 filepath = os.path.dirname(os.path.realpath(__file__))
@@ -56,7 +56,6 @@ def evaluate_mia(original, syn, test):
     
     # Encode the datasets
     original_encoded = encode_categorical(original)
-    # synGAN_encoded = encode_categorical(synGAN)
     test_encoded = encode_categorical(test)
     
     # Combine the original and synthetic data for training
@@ -114,10 +113,9 @@ if __name__ == "__main__":
     testdir = os.path.join(filepath, "Data", "test_data.xlsx")
 
     original = pd.read_excel(originaldir)
-    synGAN = pd.read_excel(syngandatadir)  #GAN
+    synGAN = pd.read_excel(syngandatadir)
     synVAE = pd.read_excel(synvaedir)
     test = pd.read_excel(testdir)
-
 
     mia_score = evaluate_mia(original, synGAN, test)
 
@@ -125,7 +123,6 @@ if __name__ == "__main__":
 
     targeted_f1 = evaluate_targeted_mia(original, synGAN, test)
     print(f"Targeted MIA F1 Score (CTGAN): {targeted_f1:.3f}")
-
 
     mia_score = evaluate_mia(original, synVAE, test)
     print(f"Membership Inference Attack Accuracy (VAE): {mia_score:.3f}")

@@ -11,7 +11,6 @@ import statsmodels.api as sm
 from sklearn.metrics import mean_squared_error, r2_score
 import os
 
-
 # Function to handle categorical variables
 def encode_categorical(data):
     
@@ -64,9 +63,6 @@ def linear_regression(data, target_variable, test_data):
     
     return model
 
-
-
-
 def compare_models(modelorig, modelgan, modelvae, filepath):
     
     # Extract coefficients from each model
@@ -83,13 +79,10 @@ def compare_models(modelorig, modelgan, modelvae, filepath):
         'Difference Model 3 - Model 1': coeffs_VAE - coeffs_orig
     })
     
-    # Print the model summaries
     print(coefficients_comparison)
-
     coefficients_comparison.to_csv(os.path.join(filepath, "Data", "comparison_coefficients.csv"))
 
-    
-    # Return the table of coefficients and differences
+    # table of coefficients and differences
     return coefficients_comparison
 
 if __name__ == "__main__": 

@@ -14,6 +14,7 @@ import numpy as np
 import os
 
 ### --- UNIVARIATE ---
+
 def decode_categorical(data):
     # Map the one-hot encoded stage columns back to the original stage category
     conditions = [
@@ -36,6 +37,7 @@ def plot_univariate(original, synthetic1, synthetic2=None):
     print('\nUNIVARIATE PLOTS')
     
     numeric_vars = original.select_dtypes(include=[np.number]).columns
+    
     # Compare numerical distributions
     for var in numeric_vars:
         fig, axes = plt.subplots(1, 2 if synthetic2 is None else 3, figsize=(18, 5), sharey=True)
@@ -49,6 +51,7 @@ def plot_univariate(original, synthetic1, synthetic2=None):
     
     synthetic1 = decode_categorical(synthetic1)
     synthetic2 = decode_categorical(synthetic2)
+    
     # Compare categorical distributions
     stage_order = ["I", "II", "III", "IV"]
 
@@ -134,26 +137,25 @@ def compare_correlation_matrices(original, synthetic1, synthetic2=None):
     
     fig, axes = plt.subplots(1, 3, figsize=(24, 6))
 
-    # Heatmap for original data
+    # Correlation heatmap for original data
     sns.heatmap(corr_original, annot=True, cmap='coolwarm', vmin=-1, vmax=1, ax=axes[0])
     axes[0].set_title("Original Data Correlation Matrix")
     
-    # Heatmap for synthetic GAN data
+    # Correlation heatmap for synthetic GAN data
     sns.heatmap(corr_synthetic1, annot=True, cmap='coolwarm', vmin=-1, vmax=1, ax=axes[1])
     axes[1].set_title("Synthetic GAN Correlation Matrix")
-    
 
-    # Heatmap for synthetic VAE data
+    # Cottelation heatmap for synthetic VAE data
     sns.heatmap(corr_synthetic2, annot=True, cmap='coolwarm', vmin=-1, vmax=1, ax=axes[2])
     axes[2].set_title("Synthetic VAE Correlation Matrix")
     
-    # Difference in correlation (diff will range from -2 to +2) for GAN
-    # sns.heatmap(diff_corr_1, annot=True, cmap='coolwarm', center=0, ax=axes[3])
-    # axes[3].set_title("Difference in Correlation (Original - GAN)")
+    # Difference in correlation for GAN
+    sns.heatmap(diff_corr_1, annot=True, cmap='coolwarm', center=0, ax=axes[3])
+    axes[3].set_title("Difference in Correlation (Original - GAN)")
 
-    # # Difference in correlation (diff will range from -2 to +2) for VAE
-    # sns.heatmap(diff_corr_2, annot=True, cmap='coolwarm', center=0, ax=axes[4])
-    # axes[4].set_title("Difference in Correlation (Original - VAE)")
+    # Difference in correlation for VAE
+    sns.heatmap(diff_corr_2, annot=True, cmap='coolwarm', center=0, ax=axes[4])
+    axes[4].set_title("Difference in Correlation (Original - VAE)")
 
     fig.tight_layout()
     fig.show()
@@ -167,7 +169,7 @@ if __name__ == "__main__":
     synvaedir = os.path.join(filepath, "Data", "synthetic_VAE_data.xlsx")
 
     original = pd.read_excel(originaldir)
-    synGAN = pd.read_excel(syngandatadir)  #GAN
+    synGAN = pd.read_excel(syngandatadir)
     synVAE = pd.read_excel(synvaedir)
     
     plot_univariate(original, synGAN, synVAE)
