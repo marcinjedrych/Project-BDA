@@ -4,15 +4,17 @@
 This project was developed for an assignment in the course Big Data Algorithms. First, we simulated an original dataset and generated synthetic versions using two generative models: **CTGAN** and **TVAE**. We focused on evaluating the synthetic data and the privacy-utility trade-off. 
 
 ## Project Structure
+
 Project-BDA/
-├── Data/ # Contains real and synthetic datasets
-├── Comparison_plots.py # Univariate and bivariate comparisons
-├── Privacy.py # Membership inference attack
-├── Simulation of example data.py# Simulates original datasets
-├── SyntheticGAN.py # Generates synthetic data using CTGAN
-├── SyntheticVAE.py # Generates synthetic data using TVAE
-├── Utility.py # Predictive performance evaluations
-├── demo.ipynb # Demo notebook showing full workflow
+  Data/                          # Contains real and synthetic datasets
+  Comparison_plots.py           # Univariate and bivariate comparisons
+  Privacy.py                    # Membership inference attack
+  README.md                     # Project overview and instructions
+  Simulation of example data.py # Simulates original datasets
+  SyntheticGAN.py               # Generates synthetic data using CTGAN
+  SyntheticVAE.py               # Generates synthetic data using TVAE
+  Utility.py                    # Predictive performance evaluations
+  demo.ipynb                    # 
 
 ## How to run
 
