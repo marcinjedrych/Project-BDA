@@ -42,4 +42,4 @@ Project-BDA/
 
 ## 👩‍💻 Authors
 
-Developed by Marcin Jedrych, Frie Van Bauwel and Xueting Li as part of the course **Big Data Algorithms (BDA)** at Ghent University.  
+Developed by **Marcin Jedrych, Frie Van Bauwel and Xueting Li** as part of the course **Big Data Algorithms (BDA)** at Ghent University.  
