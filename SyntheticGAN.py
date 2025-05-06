@@ -49,7 +49,7 @@ if __name__ == "__main__":
     df = encode_categorical(df)
 
     # Generate synthetic data
-    synthetic = generate_synthetic_data_GAN(df)
+    synthetic = generate_synthetic_data_GAN(df, epochs = 200)
 
     # Export
     outputdatadir = os.path.join(filepath, "Data", "synthetic_GAN_data.xlsx")

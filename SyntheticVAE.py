@@ -54,7 +54,7 @@ if __name__ == "__main__":
     outputdatadir = os.path.join(filepath, "Data", "synthetic_VAE_data.xlsx")
 
     df = pd.read_excel(inputdatadir)
-    df = encode_categorical(df)
+    df = encode_categorical(df, epochs = 200)
     synthetic = generate_synthetic_data_VAE(df, visualize_loss = True, evaluation = True)
     synthetic.to_excel(outputdatadir, index=False)
 
