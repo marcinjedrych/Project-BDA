@@ -59,7 +59,6 @@ def plot_relationships(data):
     plt.show()
     
     # scatterplots with LOESS smooth line
-    # fig, axes = plt.subplots(1, 2, figsize=(12, 5))
     sns.regplot(x='weight', y='bp', data=data, lowess=True, scatter_kws={'alpha':0.5})
     plt.title("Effect of Weight on Blood Pressure")
     plt.show()
@@ -79,7 +78,7 @@ data = sample_data(10000)
 
 from sklearn.model_selection import train_test_split
 
-# Split into training and test sets (e.g., 80% train, 20% test)
+# Split into training and test sets (80% train, 20% test)
 original_train_data, test_data = train_test_split(data, test_size=0.2, random_state=42)
 
 # Save both to Excel files in the 'Data' folder

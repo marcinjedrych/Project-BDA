@@ -10,17 +10,6 @@ from sdv.single_table import CTGANSynthesizer
 from sdv.metadata import SingleTableMetadata
 import os
 
-# metadata = {
-#     "primary_key": None,  # No explicit primary key in the dataset
-#     "columns": {
-#         "age": {"sdtype": "numerical", "computer_representation": "Float"},
-#         "weight": {"sdtype": "numerical", "computer_representation": "Float"},
-#         "stage": {"sdtype": "categorical"},
-#         "therapy": {"sdtype": "categorical"},
-#         "bp": {"sdtype": "numerical", "computer_representation": "Float"},
-#     }
-# }
-
 def generate_synthetic_data_GAN(df, epochs = 500):
     metadata_obj = SingleTableMetadata()
     metadata_obj.detect_from_dataframe(df)
